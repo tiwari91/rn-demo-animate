@@ -11,18 +11,18 @@ import {
 export default class App extends React.Component {
   state = {
     radius: new Animated.Value(0),
-    loading: true
+    loading: false
   };
 
   _onPressButton = () => {
-    this.setState({ loading: false });
+    this.setState({ loading: true });
     this.state.radius.setValue(0);
 
     Animated.timing(this.state.radius, {
       toValue: 200,
       duration: 500
     }).start(() => {
-      this.setState({ loading: true });
+      this.setState({ loading: false });
     });
   };
 
@@ -35,7 +35,7 @@ export default class App extends React.Component {
     return (
       <TouchableOpacity style={styles.container} onPress={this._onPressButton}>
         <SafeAreaView style={styles.container}>
-          {this.state.loading === true ? (
+          {this.state.loading === false ? (
             <Text style={styles.text}>Tap on screen</Text>
           ) : (
             <Animated.View
