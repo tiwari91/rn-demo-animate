@@ -10,15 +10,20 @@ import {
 
 export default class App extends React.Component {
   state = {
-    radius: new Animated.Value(0)
+    radius: new Animated.Value(0),
+    loading: true
   };
 
   _onPressButton = () => {
+    this.setState({ loading: false });
     this.state.radius.setValue(0);
+
     Animated.timing(this.state.radius, {
       toValue: 200,
       duration: 500
-    }).start();
+    }).start(() => {
+      this.setState({ loading: true });
+    });
   };
 
   render() {
@@ -30,16 +35,20 @@ export default class App extends React.Component {
     return (
       <TouchableOpacity style={styles.container} onPress={this._onPressButton}>
         <SafeAreaView style={styles.container}>
-          <Animated.View
-            style={[
-              styles.circle,
-              {
-                opacity,
-                width: this.state.radius,
-                height: this.state.radius
-              }
-            ]}
-          />
+          {this.state.loading === true ? (
+            <Text style={styles.text}>Tap on screen</Text>
+          ) : (
+            <Animated.View
+              style={[
+                styles.circle,
+                {
+                  opacity,
+                  width: this.state.radius,
+                  height: this.state.radius
+                }
+              ]}
+            />
+          )}
         </SafeAreaView>
       </TouchableOpacity>
     );
@@ -53,10 +62,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center"
   },
+  text: {
+    color: "#ff7676",
+    fontWeight: "bold",
+    fontSize: 30
+  },
   circle: {
     width: 200,
     height: 200,
     borderRadius: 100,
-    backgroundColor: "red"
+    backgroundColor: "#17ead9"
   }
 });
